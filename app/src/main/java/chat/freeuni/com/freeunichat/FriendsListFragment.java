@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,22 +14,27 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import chat.freeuni.com.freeunichat.adapters.FriendsListAdapter;
+import chat.freeuni.com.freeunichat.downloaders.DownloadPicturesReceiver;
 import chat.freeuni.com.freeunichat.downloaders.FriendsListDownloader;
 import chat.freeuni.com.freeunichat.downloaders.IFriendsDownloader;
+import chat.freeuni.com.freeunichat.downloaders.UsersPicturesDownloader;
 import chat.freeuni.com.freeunichat.models.User;
 
 
-public class FriendsListFragment extends Fragment implements IFriendsDownloader {
+public class FriendsListFragment extends Fragment implements IFriendsDownloader, DownloadPicturesReceiver {
 
     FriendsListDownloader downloader;
     View downloaderProgressBar;
+    RecyclerView mfriendsListRecyclerView;
+    FriendsListAdapter friendsListAdapter;
+    List<User> usersDataSet = new ArrayList<>();
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -35,6 +42,15 @@ public class FriendsListFragment extends Fragment implements IFriendsDownloader 
                              Bundle savedInstanceState) {
         View returnView = inflater.inflate(R.layout.fragment_friends_list, container, false);
         downloaderProgressBar = returnView.findViewById(R.id.progress_bar_displayer);
+        mfriendsListRecyclerView = (RecyclerView) returnView.findViewById(R.id.friends_list);
+        mfriendsListRecyclerView.setHasFixedSize(true);
+
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        mfriendsListRecyclerView.setLayoutManager(mLayoutManager);
+
+        friendsListAdapter = new FriendsListAdapter(getActivity().getApplicationContext(), usersDataSet);
+        mfriendsListRecyclerView.setAdapter(friendsListAdapter);/* */
+
         return returnView;
     }
 
@@ -45,19 +61,41 @@ public class FriendsListFragment extends Fragment implements IFriendsDownloader 
 
     }
 
-
     private void startFriendsListDownloading(){
         downloaderProgressBar.setVisibility(View.VISIBLE);
         downloader = new FriendsListDownloader(getContext(), this);
         downloader.execute(getResources().getString(R.string.friends_list_json_url));
     }
 
-
     @Override
     public void friendsListDownloaded(List<User> friendsList) {
         downloaderProgressBar.setVisibility(View.GONE);
         if (friendsList == null)
             return;
-        Toast.makeText(getContext(), "Found + " + friendsList.size(), Toast.LENGTH_SHORT).show();
+        updateUsersDataSet(friendsList);
+        //Toast.makeText(getContext(), "Found + " + friendsList.size(), Toast.LENGTH_SHORT).show();
+        downloadFriendsPictures();
+    }
+
+    private void updateUsersDataSet(List<User> friendsList){
+        usersDataSet.clear();
+        usersDataSet.addAll(friendsList);
+        dataSetChanged();
+    }
+
+    private void dataSetChanged(){
+        friendsListAdapter.notifyDataSetChanged();
+    }
+
+    //starts pictures downloader
+    private void downloadFriendsPictures(){
+        UsersPicturesDownloader picsDownloader = new UsersPicturesDownloader(getContext(), usersDataSet, this);
+        picsDownloader.execute("");
+    }
+
+    @Override
+    public void pictureDownloaded(User user){
+        //called when picture is downloaded for user
+        friendsListAdapter.notifyItemChanged(usersDataSet.indexOf(user));
     }
 }

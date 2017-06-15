@@ -3,5 +3,5 @@
 
     <!-- for testing   -->
     <integer name="download_friends_delay">300</integer>
-    <integer name="single_picture_download_delay">500</integer>
+    <integer name="single_picture_download_delay">700</integer>
 </resources>
