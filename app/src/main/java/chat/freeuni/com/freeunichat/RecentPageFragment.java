@@ -8,8 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
 
-public class RecentPageFragment extends Fragment {
+import chat.freeuni.com.freeunichat.adapters.FriendsListListener;
+import chat.freeuni.com.freeunichat.models.User;
+
+
+public class RecentPageFragment extends Fragment implements FriendsListListener {
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -19,7 +26,25 @@ public class RecentPageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_recent_page, container, false);
+    }
+
+    /*****************************************/
+    /**********Friends List Operations *******/
+    /*****************************************/
+    @Override
+    public void setFriendList(List<User> friendList){
+
+    }
+
+    @Override
+    public void friendsListUpdated() {
+
+    }
+
+    @Override
+    public void singleFriendUpdated(int position, User newUser) {
+
     }
 }

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chat.freeuni.com.freeunichat.R;
+import chat.freeuni.com.freeunichat.helpers.FirstRunChecker;
 import chat.freeuni.com.freeunichat.models.User;
 
 /**
@@ -70,10 +71,13 @@ public class UsersPicturesDownloader extends AsyncTask<String, User, Void> {
     }
 
     private void delayForTesting(){
-        try{
-            Thread.sleep((long)context.getResources().getInteger(R.integer.download_friends_delay));
-        }catch (Exception e){
+        if (FirstRunChecker.isFirstRun(context)){
+            try{
+                Thread.sleep((long)context.getResources().getInteger(R.integer.download_friends_delay));
+            }catch (Exception e){
+            }
         }
+
     }
 
     private Bitmap downloadPicture(String src){

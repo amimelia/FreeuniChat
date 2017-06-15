@@ -13,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import java.util.ArrayList;
 import java.util.List;
 
+import chat.freeuni.com.freeunichat.helpers.FirstRunChecker;
+
 public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -39,8 +41,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void chooseSelectedTab(){
-        TabLayout.Tab tab = tabLayout.getTabAt(1);
-        tab.select();
+        if (FirstRunChecker.isFirstRun(this)){
+            TabLayout.Tab tab = tabLayout.getTabAt(1);
+            tab.select();
+        }
+
     }
 
     private void setupTabIcons() {
@@ -51,8 +56,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new RecentPageFragment(), "");
-        adapter.addFragment(new FriendsListFragment(), "");
+        RecentPageFragment recentPageFragment = new RecentPageFragment();
+        FriendsListFragment fragmentFriendsList = new FriendsListFragment();
+        fragmentFriendsList.addFriendsListListener(recentPageFragment);
+
+        adapter.addFragment(recentPageFragment, "");
+        adapter.addFragment(fragmentFriendsList, "");
         adapter.addFragment(new SettingsPageFragment(), "");
         viewPager.setAdapter(adapter);
     }
