@@ -8,4 +8,9 @@
     <color name="colorAccent">#c8e8ff</color>
     <color name="offlineIconColor">#7f7f7f</color>
     <color name="onlineIconColor">#42b72a</color>
+    <color name="colorDarkTextBox">#757575</color>
+    <color name="colorDarkerTextBox">#616161</color>
+    <color name="colorDarkestTextBox">#424242</color>
+    <color name="newMessageHistoryColor">#BDBDBD</color>
+
 </resources>

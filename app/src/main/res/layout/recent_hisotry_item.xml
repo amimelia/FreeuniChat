@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="56dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/friend_picture"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft ="16dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/gaga"/>
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:layout_toLeftOf="@+id/friend_status"
+        android:layout_toRightOf="@+id/friend_picture"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/friend_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="single-line-item"
+            android:textSize="16sp"
+            android:paddingBottom="7dp"
+            android:textColor="@color/colorDarkTextBox"
+            />
+
+        <TextView
+            android:id="@+id/message_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="last_message_template"
+            android:textSize="12sp"
+            android:maxLength="100"
+            android:maxLines="1"
+            />
+    </LinearLayout>
+
+
+
+    <ImageView
+        android:id="@+id/friend_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_offline_24dp"
+        />
+
+
+</RelativeLayout>

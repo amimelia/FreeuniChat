@@ -13,6 +13,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import chat.freeuni.com.freeunichat.models.MessageStatuses;
 import chat.freeuni.com.freeunichat.models.RecentChatEntryModel;
 import chat.freeuni.com.freeunichat.models.User;
 
@@ -88,9 +89,32 @@ public class DatabaseAccess {
     public List<RecentChatEntryModel> getRecentChatHistory(){
         List<RecentChatEntryModel> recent = new ArrayList<>();
 
-
-
+        Cursor cursor = database.rawQuery(getRecentChatSqlQuery(), null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            recent.add(getRecentChatEntry(cursor));
+            cursor.moveToNext();
+        }
+        cursor.close();
         return recent;
+    }
+
+    private RecentChatEntryModel getRecentChatEntry(Cursor cursor ){
+        RecentChatEntryModel entry = new RecentChatEntryModel();
+
+        entry.messageStatus = MessageStatuses.values()[cursor.getInt(5)];
+        entry.recentMessage = cursor.getString(2);
+        entry.profileId = cursor.getInt(1);
+
+        return entry;
+    }
+
+    private String getRecentChatSqlQuery(){
+        return "SELECT *\n" +
+                "FROM chat_history \n" +
+                "WHERE id || '-' || date in \n" +
+                "(select id || '-' || max(date) as date from chat_history \n" +
+                "group by chat_to) order by date desc";
     }
 
 

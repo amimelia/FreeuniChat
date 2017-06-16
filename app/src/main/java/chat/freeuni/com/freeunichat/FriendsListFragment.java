@@ -70,8 +70,6 @@ public class FriendsListFragment extends Fragment implements IFriendsDownloader,
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
         loadFriendsList();
-
-
     }
 
     private void startFriendsListDownloading(){
