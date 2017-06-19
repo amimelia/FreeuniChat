@@ -12,5 +12,6 @@
     <color name="colorDarkerTextBox">#616161</color>
     <color name="colorDarkestTextBox">#424242</color>
     <color name="newMessageHistoryColor">#BDBDBD</color>
-
+    <color name="colorChatTo">#9E9E9E</color>
+    <color name="colorChatFrom">#03A9F4</color>
 </resources>

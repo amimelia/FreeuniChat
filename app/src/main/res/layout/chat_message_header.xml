@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:paddingBottom="10dp">
+
+    <LinearLayout
+
+        android:orientation="horizontal"
+        android:id="@+id/message_from"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_picture_from"
+            android:layout_width="@dimen/chat_picture_size"
+            android:layout_height="@dimen/chat_picture_size" />
+
+        <LinearLayout
+            android:background="@drawable/layout_rounded_from"
+            android:paddingLeft="@dimen/message_picture_padding"
+            android:id="@+id/message_holder_from"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/message_text_from"
+                android:text="hi my name is amiran melia i am from tbilisi small ocuntry "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/message_to"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+        <LinearLayout
+            android:background="@drawable/layout_rounded_to"
+            android:id="@+id/message_holder_to"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <TextView
+                android:paddingLeft="5dp"
+                android:id="@+id/message_text_to"
+                android:text="hi my name is amiran melia i am from tbilisi small ocuntry "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:paddingLeft="@dimen/message_picture_padding"
+            android:id="@+id/profile_picture_to"
+            android:layout_width="@dimen/chat_picture_size"
+            android:layout_height="@dimen/chat_picture_size" />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

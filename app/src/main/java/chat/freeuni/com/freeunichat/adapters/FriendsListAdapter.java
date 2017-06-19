@@ -20,6 +20,7 @@ import java.util.Random;
 
 import chat.freeuni.com.freeunichat.R;
 import chat.freeuni.com.freeunichat.helpers.ImageConverterHelper;
+import chat.freeuni.com.freeunichat.helpers.MessagesOpener;
 import chat.freeuni.com.freeunichat.models.User;
 
 public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.FriendsListViewHolder> {
@@ -33,12 +34,13 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
         ImageView profilePicture;
         ImageView statusPic;
         TextView nameTextView;
-
+        View mainView;
         public FriendsListViewHolder(View v) {
             super(v);
             profilePicture = (ImageView) v.findViewById(R.id.friend_picture);
             statusPic = (ImageView) v.findViewById(R.id.friend_status);
             nameTextView = (TextView) v.findViewById(R.id.friend_name);
+            this.mainView = v;
         }
     }
 
@@ -59,7 +61,7 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
 
     @Override
     public void onBindViewHolder(FriendsListViewHolder holder, int position) {
-        User userToDisplay = mDataset.get(position);
+        final User userToDisplay = mDataset.get(position);
         holder.nameTextView.setText(userToDisplay.displayName);
         int statusDrawable = userToDisplay.isActive ? statusPic[1] : statusPic[0];
         holder.statusPic.setImageDrawable(ContextCompat.getDrawable(context, statusDrawable));
@@ -68,6 +70,13 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
             holder.profilePicture.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_face_24dp));
         else
             holder.profilePicture.setImageBitmap(userToDisplay.avatarImgBitmap);/**/
+
+        holder.mainView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MessagesOpener.openChatTo(context, userToDisplay, userToDisplay.id);
+            }
+        });
     }
 
     @Override

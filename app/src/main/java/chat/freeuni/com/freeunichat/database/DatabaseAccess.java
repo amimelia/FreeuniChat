@@ -13,13 +13,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import chat.freeuni.com.freeunichat.models.Message;
 import chat.freeuni.com.freeunichat.models.MessageStatuses;
 import chat.freeuni.com.freeunichat.models.RecentChatEntryModel;
 import chat.freeuni.com.freeunichat.models.User;
 
 public class DatabaseAccess {
 
-    public static String DateFormat = "YYYY-MM-DD HH:MM:SS";
+    ///2017-04-06 01:01:01
+    public static String DateFormat = "yyyy-MM-dd HH:mm:ss";
 
     private SQLiteOpenHelper openHelper;
     private SQLiteDatabase database;
@@ -76,6 +78,17 @@ public class DatabaseAccess {
         return friends;
     }
 
+    public void saveMessage(Message message){
+        ContentValues values = new ContentValues();
+        values.put("chat_to", message.chatTo);
+        values.put("message", message.message);
+        values.put("is_sent", message.isSent);
+        values.put("date", message.date);
+        values.put("status", message.messageStatus.ordinal());
+        long retValue = database.insert("chat_history", null, values);
+
+    }
+
     private User getFriendFromCursor(Cursor cursor) {
         User c = new User();
         c.id = cursor.getInt(1);
@@ -84,6 +97,29 @@ public class DatabaseAccess {
         c.avatarImgUrl = cursor.getString(4);
         c.about = cursor.getString(5);
         return c;
+    }
+
+    public List<Message> getChatMessagesTo(int id){
+        List<Message> chatMessages = new ArrayList<>();
+        database.execSQL("update chat_history set status = 1 where chat_to = " + id);
+        Cursor cursor = database.rawQuery("select * from chat_history where chat_to = " + id, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            chatMessages.add(getMessagesFromCursor(cursor));
+            cursor.moveToNext();
+        }
+
+        return chatMessages;
+    }
+
+    private Message getMessagesFromCursor(Cursor cursor) {
+        Message curMessage = new Message();
+        curMessage.chatTo = cursor.getInt(1);
+        curMessage.message = cursor.getString(2);
+        curMessage.isSent = cursor.getInt(3);
+        curMessage.date = cursor.getString(4);
+        curMessage.messageStatus = MessageStatuses.values()[cursor.getInt(5)];
+        return curMessage;
     }
 
     public List<RecentChatEntryModel> getRecentChatHistory(){

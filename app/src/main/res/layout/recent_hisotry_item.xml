@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="last_message_template"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:maxLength="100"
             android:maxLines="1"
             />

@@ -3,11 +3,57 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="chat.freeuni.com.freeunichat.SettingsPageFragment">
+    
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="@dimen/my_picture_size"
+            android:layout_height="@dimen/my_picture_size"
+            android:src="@drawable/mypic"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/my_name_str"
+            android:textSize="@dimen/m_info_text_size"
+            android:layout_gravity="center"
+            android:paddingTop="@dimen/mobile_number_tb_padding"/>
+
+
+        <TextView
+            android:textSize="@dimen/m_info_text_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/my_number_str"
+            android:paddingTop="@dimen/mobile_number_tb_padding"
+            android:paddingBottom="@dimen/mobile_number_tb_padding"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+
+
+        <Switch
+            android:id="@+id/status_bar_notifications"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/option_status_bar_notif" />
+
+
+        <Switch
+
+            android:id="@+id/inc_message_sound"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/option_message_sound_text" />
+
+    </LinearLayout>
+    
+
 
 </FrameLayout>

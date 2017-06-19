@@ -13,6 +13,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import chat.freeuni.com.freeunichat.R;
+import chat.freeuni.com.freeunichat.helpers.MessagesOpener;
+import chat.freeuni.com.freeunichat.models.Message;
 import chat.freeuni.com.freeunichat.models.MessageStatuses;
 import chat.freeuni.com.freeunichat.models.RecentChatEntryModel;
 import chat.freeuni.com.freeunichat.models.User;
@@ -56,7 +58,7 @@ public class RecentChatAdapter extends RecyclerView.Adapter<RecentChatAdapter.Re
     public RecentChatAdapter.RecentEntryViewHolder onCreateViewHolder(ViewGroup parent,
                                                                        int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.firends_list_item, parent, false);
+                .inflate(R.layout.recent_hisotry_item, parent, false);
         RecentEntryViewHolder vh = new RecentEntryViewHolder(itemView);
         return vh;
     }
@@ -64,8 +66,8 @@ public class RecentChatAdapter extends RecyclerView.Adapter<RecentChatAdapter.Re
     @Override
     public void onBindViewHolder(RecentEntryViewHolder holder, int position) {
 
-        RecentChatEntryModel curModel = mDataset.get(position);
-        User userToDisplay = usersHolder.getUserById(curModel.profileId);
+        final RecentChatEntryModel curModel = mDataset.get(position);
+        final User userToDisplay = usersHolder.getUserById(curModel.profileId);
 
         holder.nameTextView.setText(userToDisplay.displayName);
         int statusDrawable = userToDisplay.isActive ? statusPic[1] : statusPic[0];
@@ -79,7 +81,16 @@ public class RecentChatAdapter extends RecyclerView.Adapter<RecentChatAdapter.Re
 
         if (curModel.messageStatus == MessageStatuses.New){
             holder.holderView.setBackgroundColor(context.getResources().getColor(R.color.newMessageHistoryColor));
+        }else{
+
         }
+
+        holder.holderView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MessagesOpener.openChatTo(context, userToDisplay, curModel.profileId);
+            }
+        });
     }
 
     @Override

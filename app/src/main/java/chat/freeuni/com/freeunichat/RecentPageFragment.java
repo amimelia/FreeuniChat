@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import junit.framework.Test;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,12 +23,15 @@ import chat.freeuni.com.freeunichat.adapters.FriendsListAdapter;
 import chat.freeuni.com.freeunichat.adapters.FriendsListListener;
 import chat.freeuni.com.freeunichat.adapters.IUsersListHolder;
 import chat.freeuni.com.freeunichat.adapters.RecentChatAdapter;
+import chat.freeuni.com.freeunichat.chat.ChatEventListener;
+import chat.freeuni.com.freeunichat.chat.TestChatTransport;
 import chat.freeuni.com.freeunichat.database.DatabaseAccess;
+import chat.freeuni.com.freeunichat.models.Message;
 import chat.freeuni.com.freeunichat.models.RecentChatEntryModel;
 import chat.freeuni.com.freeunichat.models.User;
 
 
-public class RecentPageFragment extends Fragment implements FriendsListListener, IUsersListHolder {
+public class RecentPageFragment extends Fragment implements FriendsListListener, IUsersListHolder, ChatEventListener {
 
 
     List<RecentChatEntryModel> recentChatEntrysDataSet = new ArrayList<>();
@@ -50,7 +55,7 @@ public class RecentPageFragment extends Fragment implements FriendsListListener,
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recentHistoryRv.setLayoutManager(mLayoutManager);
 
-        recentChatAdapter = new RecentChatAdapter(getActivity().getApplicationContext(),
+        recentChatAdapter = new RecentChatAdapter(getActivity(),
                 recentChatEntrysDataSet, this);
         recentHistoryRv.setAdapter(recentChatAdapter);/* */
 
@@ -60,16 +65,26 @@ public class RecentPageFragment extends Fragment implements FriendsListListener,
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        loadRecentChatList();
+        TestChatTransport.getChatManager().addChatEventListener(this);
+
     }
 
     //downloads recent chat history and sends it for display
     private void loadRecentChatList(){
-        DatabaseAccess dbAcc = new DatabaseAccess(getContext());
+        Context context = getApplicationContext();
+        if (context == null)
+            return ;
+        DatabaseAccess dbAcc = new DatabaseAccess(context);
         dbAcc.open();
         List<RecentChatEntryModel> recChatEntrys = dbAcc.getRecentChatHistory();
         dbAcc.close();
         setRecentChatEntrys(recChatEntrys);
+    }
+
+    private Context getApplicationContext(){
+        if (getActivity() == null)
+            return null;
+        return getActivity().getApplicationContext();
     }
 
 
@@ -78,9 +93,7 @@ public class RecentPageFragment extends Fragment implements FriendsListListener,
         if (usersDataSet == null || usersDataSet.isEmpty())
             return;
         recentChatEntrysDataSet.addAll(recentChatEntrys);
-        mapFriendsList();
         recentChatAdapter.notifyDataSetChanged();
-        //TODO call notify dataset changed
     }
 
 
@@ -99,31 +112,48 @@ public class RecentPageFragment extends Fragment implements FriendsListListener,
 
     /*****************************************/
     /**********Friends List Operations *******/
-    /*****************************************/
+     /*****************************************/
+
+    //gets called only once loads recent chat list afterwards
     @Override
     public void setFriendList(List<User> friendList){
         usersDataSet = friendList;
-        mapFriendsList();
+        loadRecentChatList();
     }
 
     @Override
     public void friendsListUpdated() {
-        mapFriendsList();
-    }
-
-    public void mapFriendsList(){
-        if (usersDataSet == null || usersDataSet.isEmpty())
-            return;
-        if (recentChatEntrysDataSet == null || recentChatEntrysDataSet.isEmpty())
-            return;
-        userRecentEntrysMapping.clear();
-       for (int i )
-
+        loadRecentChatList();
     }
 
     //position in friends list
     @Override
     public void singleFriendUpdated(int position, User newUser) {
+        if (recentChatEntrysDataSet == null)
+            return;
+
+        for (int i = 0; i < recentChatEntrysDataSet.size(); i++){
+            if (recentChatEntrysDataSet.get(i).profileId == newUser.id){
+                recentChatAdapter.notifyItemChanged(i);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void contactStatusChanged(Message m) {
+
+    }
+
+    @Override
+    public void incomingMessage(Message m) {
+        loadRecentChatList();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        TestChatTransport.getChatManager().removeEventListener(this);
 
     }
 }
