@@ -101,7 +101,7 @@ public class DatabaseAccess {
 
     public List<Message> getChatMessagesTo(int id){
         List<Message> chatMessages = new ArrayList<>();
-        database.execSQL("update chat_history set status = 1 where chat_to = " + id);
+        database.execSQL("update chat_history set status = 0 where chat_to = " + id);
         Cursor cursor = database.rawQuery("select * from chat_history where chat_to = " + id, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

@@ -57,7 +57,7 @@ public class TestChatTransport {
                 sendMessageToUser(newMessage);
                 startListeningChatEvents();
             }
-        }, 30 * 1000);
+        }, 60 * 1000);
     }
 
     //called when message is generated for user

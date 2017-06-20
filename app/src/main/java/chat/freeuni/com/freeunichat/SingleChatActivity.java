@@ -33,6 +33,7 @@ import chat.freeuni.com.freeunichat.models.User;
 public class SingleChatActivity extends AppCompatActivity implements ChatEventListener {
 
     private int mchatTo = 0;
+    User mchatToUser = null;
     List<Message> chatMessagesDataSet = new ArrayList<>();
     ChatMessagesAdapter chatMessagesAdapter;
     Bitmap[] profilePictures;
@@ -42,10 +43,10 @@ public class SingleChatActivity extends AppCompatActivity implements ChatEventLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_chat);
-
+        mchatToUser = ChatActivityParametPasser.chatActivityUserParameter;
         Intent intent = getIntent();
-        String message = intent.getStringExtra(MessagesOpener.PROFILE_ID_PARAM);
-        mchatTo = Integer.parseInt(message);
+        String chatToId = intent.getStringExtra(MessagesOpener.PROFILE_ID_PARAM);
+        mchatTo = Integer.parseInt(chatToId);
         messageTextBox = (EditText) findViewById(R.id.messageEdit);
         RecyclerView chatRv = (RecyclerView)findViewById(R.id.messagesContainer);
         chatRv.setHasFixedSize(true);
@@ -61,7 +62,7 @@ public class SingleChatActivity extends AppCompatActivity implements ChatEventLi
         });
 
         chatMessagesAdapter = new ChatMessagesAdapter(getApplicationContext(),
-                chatMessagesDataSet, ChatActivityParametPasser.chatActivityUserParameter);
+                chatMessagesDataSet, mchatToUser);
         chatRv.setAdapter(chatMessagesAdapter);/* */
         TestChatTransport.getChatManager().addChatEventListener(this);
         updateChatView();

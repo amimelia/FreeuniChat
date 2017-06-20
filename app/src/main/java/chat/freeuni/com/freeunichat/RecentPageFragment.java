@@ -36,7 +36,6 @@ public class RecentPageFragment extends Fragment implements FriendsListListener,
 
     List<RecentChatEntryModel> recentChatEntrysDataSet = new ArrayList<>();
     List<User> usersDataSet;
-    Map<Integer, Integer> userRecentEntrysMapping = new HashMap<Integer, Integer>();
 
     RecyclerView recentHistoryRv;
     RecentChatAdapter recentChatAdapter;
@@ -85,6 +84,12 @@ public class RecentPageFragment extends Fragment implements FriendsListListener,
         if (getActivity() == null)
             return null;
         return getActivity().getApplicationContext();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        loadRecentChatList();
     }
 
 

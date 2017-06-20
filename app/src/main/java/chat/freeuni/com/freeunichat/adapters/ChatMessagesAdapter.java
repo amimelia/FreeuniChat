@@ -111,7 +111,10 @@ public class ChatMessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (curMessage.isSent == 0){
             vh.messageTo.setVisibility(View.GONE);
             vh.messageTextFrom.setText(curMessage.message);
-            vh.profilePicFrom.setImageBitmap(userChatTo.avatarImgBitmap);
+            if (userChatTo.avatarImgBitmap == null)
+                vh.profilePicTo.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_face_24dp));
+            else
+                vh.profilePicFrom.setImageBitmap(userChatTo.avatarImgBitmap);
         }else{
             vh.messageFrom.setVisibility(View.GONE);
             vh.messageTextTo.setText(curMessage.message);
