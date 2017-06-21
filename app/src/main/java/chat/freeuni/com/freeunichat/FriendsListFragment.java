@@ -60,7 +60,7 @@ public class FriendsListFragment extends Fragment implements IFriendsDownloader,
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mfriendsListRecyclerView.setLayoutManager(mLayoutManager);
 
-        friendsListAdapter = new FriendsListAdapter(getActivity().getApplicationContext(), usersDataSet);
+        friendsListAdapter = new FriendsListAdapter(getActivity(), usersDataSet);
         mfriendsListRecyclerView.setAdapter(friendsListAdapter);/* */
 
         return returnView;
